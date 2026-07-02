@@ -24,11 +24,22 @@ export interface VoteFromDB {
   times: TimeFromDB[];
 }
 
+export interface PublicTimeCount {
+  start: number;
+  end: number;
+  yes: number;
+  ifNeedBe: number;
+  total: number;
+}
+
 export interface Poll {
   title?: string;
   description?: string;
   open?: boolean;
   secret: string;
+  ownerId?: string;
+  ownerEmail?: string;
+  ownerName?: string;
   location?: string;
   type?: string;
   times: Time[];
@@ -42,11 +53,16 @@ export interface PollFromDB {
   description?: string;
   open?: boolean;
   secret: string;
+  ownerId?: string;
+  ownerEmail?: string;
+  ownerName?: string;
   location?: string;
   type?: string;
   times: TimeFromDB[];
   finalTime?: TimeFromDB;
   votes?: VoteFromDB[];
+  occupiedTimes?: TimeFromDB[];
+  publicTimeCounts?: PublicTimeCount[];
   createdAt: string;
   updatedAt: string;
   __v: number;
@@ -57,6 +73,9 @@ export interface PollDoc extends Document {
   description?: string;
   open?: boolean;
   secret: string;
+  ownerId?: string;
+  ownerEmail?: string;
+  ownerName?: string;
   location?: string;
   type?: string;
   times: Time[];
@@ -70,6 +89,9 @@ const PollSchema: Schema = new Schema(
     description: { type: String },
     open: { type: Boolean, default: true },
     secret: { type: String, required: true },
+    ownerId: { type: String },
+    ownerEmail: { type: String },
+    ownerName: { type: String },
     location: { type: String },
     type: { type: String },
     times: {

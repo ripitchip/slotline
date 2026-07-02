@@ -1,6 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import SamayPoll, { Vote, PollDoc } from "../../../src/models/poll";
+import SamayPoll, { Vote, PollDoc, PollFromDB } from "../../../src/models/poll";
 import { isTimePresentInPollTimes } from "../../../src/helpers";
+import { getOptionalApiSession } from "../../../src/utils/auth";
+import {
+  getSessionUserId,
+  serializePollForViewer,
+} from "../../../src/utils/pollAccess";
 import connectToDatabase from "../../../src/utils/db";
 
 export default async (
@@ -23,7 +28,14 @@ export default async (
         if (!poll) {
           res.status(404).json({ message: "Poll does not exist" });
         } else {
-          res.status(200).json(poll);
+          const session = await getOptionalApiSession(req, res);
+          const viewerId = getSessionUserId(session);
+
+          res
+            .status(200)
+            .json(
+              serializePollForViewer(poll as unknown as PollFromDB, viewerId)
+            );
         }
       } catch (err) {
         res.status(404).json({ message: err.message });
@@ -60,11 +72,12 @@ export default async (
                 },
               ];
             }
-            const updatedPoll: PollDoc | null = await SamayPoll.findOneAndUpdate(
-              { _id: id },
-              { votes: newVotes },
-              { new: true }
-            );
+            const updatedPoll: PollDoc | null =
+              await SamayPoll.findOneAndUpdate(
+                { _id: id },
+                { votes: newVotes },
+                { new: true }
+              );
             res.status(201).json(updatedPoll);
           }
         } else {

@@ -1,15 +1,14 @@
-import mongoose, { connect, ConnectionOptions } from "mongoose";
+import mongoose, { ConnectOptions } from "mongoose";
 
 const { NEXT_MONGODB_URI } = process.env;
 
-mongoose.set('strictQuery', true);
+mongoose.set("strictQuery", true);
 
-const options: ConnectionOptions = {
-  useUnifiedTopology: true,
+const options: ConnectOptions = {
   autoIndex: true,
 };
 
 const connectToDatabase = (): Promise<typeof import("mongoose")> =>
-  connect(NEXT_MONGODB_URI, options);
+  mongoose.connect(NEXT_MONGODB_URI, options);
 
 export default connectToDatabase;

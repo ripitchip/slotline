@@ -1,12 +1,12 @@
 import { Dispatch } from "react";
 import { Table } from "react-bootstrap";
+import { PersonFill } from "react-bootstrap-icons";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import MarkTimes from "./MarkTimes";
 import MarkTimesOneOnOne from "./MarkTimesOneOnOne";
 import PollDateTime from "./PollDateTime";
 import { Time, PollFromDB, Vote } from "../../models/poll";
-import { isTimePresentInPollTimes } from "../../helpers";
 
 dayjs.extend(localizedFormat);
 
@@ -18,14 +18,22 @@ const PollTableVoter = (props: {
 }): JSX.Element => {
   const { pollFromDB, sortedTimes, newVote, setNewVote } = props;
 
-  let availableTimes = [];
-  let votedTimes = pollFromDB.votes.map((vote) => vote.times[0]);
+  const getPublicCountLabel = (time: Time): string => {
+    const count = pollFromDB.publicTimeCounts?.find(
+      (currentCount) =>
+        currentCount.start === time.start && currentCount.end === time.end
+    );
 
-  pollFromDB.times.map((time) => {
-    if (!isTimePresentInPollTimes(time, votedTimes)) {
-      availableTimes.push(time);
+    if (!count || count.total === 0) {
+      return "0 votes";
     }
-  });
+
+    if (count.ifNeedBe > 0) {
+      return `${count.yes} yes, ${count.ifNeedBe} maybe`;
+    }
+
+    return `${count.yes} yes`;
+  };
 
   return (
     <div>
@@ -44,19 +52,29 @@ const PollTableVoter = (props: {
                 </th>
               ))}
             {pollFromDB.type === "oneonone" &&
-              availableTimes.map((time, i) => (
+              sortedTimes.map((time, i) => (
                 <th key={JSON.stringify(time)} className="poll-slot-time">
                   <PollDateTime
                     time={time}
                     type="voter"
                     index={i}
-                    times={availableTimes}
+                    times={sortedTimes}
                   />
                 </th>
               ))}
           </tr>
         </thead>
         <tbody>
+          <tr>
+            {sortedTimes.map((time: Time) => (
+              <td key={JSON.stringify(time)} className="poll-public-count-cell">
+                <span className="poll-public-count">
+                  <PersonFill className="poll-public-count-icon" />
+                  {getPublicCountLabel(time)}
+                </span>
+              </td>
+            ))}
+          </tr>
           {pollFromDB.open &&
             (!pollFromDB.type || pollFromDB.type === "group") && (
               <MarkTimes

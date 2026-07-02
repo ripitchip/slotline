@@ -238,6 +238,28 @@
   }
 }
 
+.poll-public-count-cell {
+  font-family: "Inter";
+  background-color: #fefffe;
+  text-align: center;
+  border-top: 0 !important;
+  padding-top: 0;
+  padding-bottom: 1rem;
+}
+
+.poll-public-count {
+  color: #4b5563;
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.poll-public-count-icon {
+  color: #c4c4c4;
+  margin-top: -0.1rem;
+  margin-right: 0.2rem;
+}
+
 .poll-slot-checked {
   background-color: #f0fdf4;
   text-align: center;
@@ -357,6 +379,10 @@
   text-align: center;
 }
 
+.poll-slot-checkbox-final-cell-disabled {
+  opacity: 0.35;
+}
+
 .poll-slot-checkbox input[type="radio"] {
   width: 1.5rem;
   height: 1.5rem;
@@ -382,6 +408,11 @@
   background-color: #49de80;
   padding: 4px;
   border: 0.15rem solid #49de80;
+}
+
+.poll-slot-checkbox-one-on-one input[type="radio"]:disabled {
+  cursor: not-allowed;
+  background-color: #e5e7eb;
 }
 
 .copy-text-desktop {

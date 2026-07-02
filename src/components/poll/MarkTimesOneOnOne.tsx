@@ -11,15 +11,8 @@ const MarkTimesOneOnOne = (props: {
 }): JSX.Element => {
   const { times, newVote, poll, setNewVote } = props;
 
-  let availableTimes = [];
-
-  let VotedTimes = poll.votes.map((vote) => vote.times[0]);
-
-  poll.times.map((time) => {
-    if (!isTimePresentInPollTimes(time, VotedTimes)) {
-      availableTimes.push(time);
-    }
-  });
+  let votedTimes =
+    poll.occupiedTimes || poll.votes?.map((vote) => vote.times[0]) || [];
 
   const [radioButtonChecked, setRadioButtonChecked] = useState("");
 
@@ -40,21 +33,28 @@ const MarkTimesOneOnOne = (props: {
 
   return (
     <tr>
-      {availableTimes.map((time) => (
-        <td
-          key={JSON.stringify(time)}
-          className="poll-slot-checkbox-final-cell"
-        >
-          <Form.Check
-            data-value={JSON.stringify(time)}
-            type="radio"
-            className="poll-slot-checkbox-one-on-one"
-            onChange={handleMarkTimeRadioButton}
-            id={JSON.stringify(time)}
-            checked={radioButtonChecked === JSON.stringify(time)}
-          />
-        </td>
-      ))}
+      {times.map((time) => {
+        const occupied = isTimePresentInPollTimes(time, votedTimes);
+
+        return (
+          <td
+            key={JSON.stringify(time)}
+            className={`poll-slot-checkbox-final-cell ${
+              occupied ? "poll-slot-checkbox-final-cell-disabled" : ""
+            }`}
+          >
+            <Form.Check
+              data-value={JSON.stringify(time)}
+              type="radio"
+              className="poll-slot-checkbox-one-on-one"
+              onChange={handleMarkTimeRadioButton}
+              id={JSON.stringify(time)}
+              disabled={occupied}
+              checked={radioButtonChecked === JSON.stringify(time)}
+            />
+          </td>
+        );
+      })}
     </tr>
   );
 };

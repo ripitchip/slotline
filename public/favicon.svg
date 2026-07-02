@@ -1,18 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 24.1.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 1000 1000" style="enable-background:new 0 0 1000 1000;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:#FFFFFF;stroke:#000000;stroke-width:115;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
-	.st1{stroke:#000000;stroke-width:100;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
-	.st2{fill:#FFFFFF;}
-</style>
-<path class="st0" d="M672.5,929.5h-344c-141.9,0-257-115.1-257-257v-344c0-141.9,115.1-257,257-257h344c141.9,0,257,115.1,257,257
-	v344C929.5,814.4,814.4,929.5,672.5,929.5z"/>
-<circle class="st1" cx="662.5" cy="337.5" r="82.5"/>
-<circle class="st1" cx="337.5" cy="662.5" r="82.5"/>
-<circle class="st1" cx="662.5" cy="662.5" r="82.5"/>
-<circle class="st1" cx="337.5" cy="337.5" r="82.5"/>
-<path class="st2" d="M571,639H428c-37.6,0-68-30.4-68-68V428c0-37.6,30.4-68,68-68h143c37.6,0,68,30.4,68,68v143
-	C639,608.6,608.6,639,571,639z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="92" fill="#1f2937" />
+  <path
+    d="M128 150h256M128 256h256M128 362h256"
+    fill="none"
+    stroke="#f8fafc"
+    stroke-width="34"
+    stroke-linecap="round"
+  />
+  <rect x="112" y="115" width="96" height="70" rx="18" fill="#f8c14a" />
+  <rect x="258" y="221" width="142" height="70" rx="18" fill="#14b8a6" />
+  <rect x="112" y="327" width="142" height="70" rx="18" fill="#f8fafc" />
+  <path
+    d="M141 150h38M287 256h84M141 362h84"
+    fill="none"
+    stroke="#1f2937"
+    stroke-width="18"
+    stroke-linecap="round"
+  />
 </svg>

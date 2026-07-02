@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Router from "next/router";
 import Head from "next/head";
 import { GetServerSideProps } from "next";
 import { Container, Jumbotron, Form } from "react-bootstrap";
@@ -11,7 +10,6 @@ import PollTableVoter from "../../src/components/poll/PollTableVoter";
 import SubmitTimes from "../../src/components/poll/SubmitTimes";
 import Layout from "../../src/components/Layout";
 import { TimeFromDB, Vote, PollFromDB } from "../../src/models/poll";
-import { decrypt } from "../../src/helpers";
 
 dayjs.extend(localizedFormat);
 
@@ -42,28 +40,6 @@ const Poll = (props: {
   };
 
   if (typeof window !== "undefined") {
-    let createdPollsFromLS = JSON.parse(
-      localStorage.getItem("samayCreatedPolls")
-    );
-
-    if (createdPollsFromLS && createdPollsFromLS.polls.length) {
-      const lSKeyForPoll = `${pollID}-${
-        pollFromDB.title ? pollFromDB.title : ""
-      }`;
-
-      for (let i = 0; i < createdPollsFromLS.polls.length; i += 1) {
-        let poll = createdPollsFromLS.polls[i];
-
-        if (
-          Object.keys(poll)[0] === lSKeyForPoll &&
-          poll[Object.keys(poll)[0]] === pollFromDB.secret
-        ) {
-          Router.push(`/poll/${pollID}/${decrypt(pollFromDB.secret)}`);
-          return <></>;
-        }
-      }
-    }
-
     let votedPollsFromLS = JSON.parse(localStorage.getItem("samayVotedPolls"));
 
     if (votedPollsFromLS && votedPollsFromLS.polls.length) {
@@ -156,7 +132,7 @@ const Poll = (props: {
             <Jumbotron className="poll-info-jumbo">
               <VoterPollInfo
                 poll={pollFromDB}
-                showFinalTime={!pollFromDB.open}
+                showFinalTime={false}
                 showVoteRecordedGroup={showVoteRecordedGroup}
                 showVoteRecordedOneOnOne={showVoteRecordedOneOnOne}
                 votedTimeOneOnOne={votedTimeOneOnOne}

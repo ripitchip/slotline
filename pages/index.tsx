@@ -1,4 +1,5 @@
 import { nanoid } from "nanoid";
+import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Router from "next/router";
 import { useState } from "react";
@@ -18,6 +19,7 @@ import { encrypt } from "../src/helpers";
 import toastOptions from "../src/helpers/toastOptions";
 import { Poll, Time } from "../src/models/poll";
 import { createPoll } from "../src/utils/api/server";
+import { getPageSession } from "../src/utils/auth";
 
 const Home = (): JSX.Element => {
   const [pollDetails, setPollDetails] = useState<{
@@ -247,6 +249,25 @@ const Home = (): JSX.Element => {
       </Layout>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getPageSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/login?callbackUrl=/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      session,
+    },
+  };
 };
 
 export default Home;
