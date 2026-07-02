@@ -1,177 +1,155 @@
 <div align="center">
-  <a href="https://samay.app/">
-    <img
-      src="./public/favicon.svg"
-      alt="Samay Logo"
-      height="64"
-    />
-  </a>
+  <img src="./public/favicon.svg" alt="Slotline Logo" height="64" />
   <p>
-    <b>
-      Samay — free and open source group scheduling tool
-    </b>
+    <b>Slotline — private scheduling with public availability counts</b>
   </p>
-  <p>
-
-[![License](https://img.shields.io/github/license/anandbaburajan/samay?color=%23000000&style=for-the-badge)](https://github.com/anandbaburajan/samay/blob/main/LICENSE)
-[![Polls created: 2500+](https://shields.io/badge/style-2500+-black?&style=for-the-badge&label=Polls%20created)](https://samay.app/)
-[![Create a poll](https://shields.io/badge/style-Now-black?&style=for-the-badge&label=Create%20a%20poll)](https://samay.app/)
-
-  </p>
-  <br/>
 </div>
 
-<img src="./public/banner.png" alt="Samay banner"/>
+Slotline is a self-hostable scheduling app for teams. Poll creators sign in with
+OIDC, participants answer from a public link, and everyone can see availability
+counts without exposing participant names or full responses.
 
-<br/>
+## Features
 
-Samay is a free and open source group scheduling tool. Quickly find a time which works for everyone without the back-and-forth texts/emails!
+- OIDC login for poll creators.
+- Anonymous voting by poll link.
+- Public availability counts per time slot.
+- Full participant responses visible to the poll owner/admin.
+- Group polls and one-on-one polls.
+- MongoDB storage.
+- Docker and Docker Compose support.
+- GitHub Actions workflow to build and publish a Docker image to GHCR.
 
-> #### Create a poll
->
-> Select times you're free (click and drag), and optionally enter the title, description and location. The default poll type is "group" — to find a common time which works for everyone. If you want to have one-on-one meetings (parent-teacher meetings for example), select the "one-on-one" poll type.
->
-> #### Share the poll
->
-> Copy and share the poll link with the participants to let them mark their availability. In group polls, participants can either vote [yes] by clicking once or [if need be] by clicking twice. In one-on-one polls, participants can select their one preferred time. No login required. No time zone confusion since Samay automatically shows participants times in their local time zone.
->
-> #### Book the meeting
->
-> In group polls, find the most popular times and see who's free with [yes] votes - or who can be - with [if need be] votes, book the meeting and share the final time with the participants! In one-on-one polls, find who has chosen which time slot for a one-on-one with you!
+## Access model
 
-Create a poll now at [Samay.app](https://samay.app/)!
+- Anonymous visitors can open a poll link and vote.
+- Anonymous visitors can see slot counts, but not participant names.
+- Anonymous visitors cannot create polls.
+- Authenticated users can create polls.
+- Authenticated users can view their own polls from **My polls**.
+- Poll owners can view full results and finalize a time.
 
-## Motivation
+## Configuration
 
-After my GSoC '20 at LiberTEM, I wanted to have a video call with my mentors. They said yes, and since the next step was to find a suitable and common time, one of them sent me a link to a meeting poll created using a proprietary online service. It had surprisingly bad UX and was covered with advertisements. I searched for good, free and open source group scheduling tools, but didn't find any. So I decided to fix that problem.
+Copy the example environment file:
 
-## Get in touch
+```sh
+cp .env.example .env
+```
 
-If you have suggestions for how Samay could be improved or want to report an issue, check if a corresponding GitHub issue is already opened [here](https://github.com/anandbaburajan/samay/issues), otherwise open a new issue.
+Required local values:
 
-## Self-hosting
+```env
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+NEXT_PUBLIC_ENCRYPTION_KEY=<32-character-value>
+NEXT_PUBLIC_ENCRYPTION_IV=<16-character-value>
 
-### Docker
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=<random-secret>
 
-We have an experimental Docker Compose file that can be used for self-hosting without need for an external database on MongoDB Atlas or other provider. To proceed with self-hosting using Docker Compose:
+OIDC_ISSUER=https://auth.example.com/realms/example
+OIDC_CLIENT_ID=slotline
+OIDC_CLIENT_SECRET=<client-secret-if-required>
+OIDC_PROVIDER_NAME=OIDC
+```
 
-1. Clone the repository.
+Generate encryption values:
 
-   ```shell
-   git clone https://github.com/anandbaburajan/samay
-   cd samay
-   ```
+```sh
+openssl rand -hex 16
+openssl rand -hex 8
+```
 
-2. Populate the environment variables based on `.env.example` file based on the instructions provided in it.
+Generate a NextAuth secret:
 
-   ```shell
-   cp .env.example .env
-   ```
+```sh
+openssl rand -base64 32
+```
 
-3. Start the cluster after setting the needed values.
+For Keycloak or another OIDC provider, configure the redirect URI:
 
-   ```shell
-   docker compose up --build
-   ```
+```text
+http://localhost:3000/api/auth/callback/oidc
+```
 
-The web app can be accessed at http://localhost:3000.
+## Run with Docker Compose
 
-> [!TIP]
->
-> You can stop the cluster using `docker compose down` in the repository directory.
-> This does not delete the volumes and data in it, to delete along with volumes (this also deletes all poll data):
->
-> ```shell
-> docker compose down --volumes
-> ```
+```sh
+docker compose up --build
+```
 
-> [!TIP]
->
-> You may wish to use an external database (on Atlas), for which you can remove the `mongo` section in `compose.yaml` and define `NEXT_MONGODB_URI` with the connection string to the external database.
+The app is available at:
 
-### Vercel and MongoDB Atlas
+```text
+http://localhost:3000
+```
 
-Samay is built with MongoDB and Next.js, so for a quick and free setup, you can use a free MongoDB Atlas cluster and Vercel's hobby plan.
+Stop the stack:
 
-You can get started with MongoDB Atlas for free [here](https://www.mongodb.com/basics/mongodb-atlas-tutorial). Make sure to add all IP addresses (0.0.0.0/0) to the IP access list of your Atlas cluster since it is not possible to determine the IP addresses of Vercel deployments.
+```sh
+docker compose down
+```
 
-You can get started with Vercel's hobby plan for free:
+Remove local MongoDB data as well:
 
-1. Fork this repo to your own GitHub account
-2. Go to https://vercel.com/dashboard
-3. Create a new project
-4. Import your forked repository
-5. Set the environment variables (according to the instructions in .env.example)
-6. Deploy
+```sh
+docker compose down --volumes
+```
 
-## Contributing
+## Development
 
-### Development
+Install dependencies:
 
-First, make sure you have [Node.js](https://nodejs.org/en/) and [MongoDB](https://www.mongodb.com/docs/manual/installation/#mongodb-installation-tutorials) installed. Then, to develop locally:
+```sh
+npm install
+```
 
-1. Fork this repo to your own GitHub account and then clone it.
+Run the development server:
 
-   ```sh
-   git clone https://github.com/<your-username>/samay.git
-   ```
+```sh
+npm run dev
+```
 
-2. Go to the project folder
+Run TypeScript checks:
 
-   ```sh
-   cd samay
-   ```
+```sh
+npx tsc --noEmit
+```
 
-3. Create a new branch:
+Build:
 
-   ```sh
-   git checkout -b MY_BRANCH_NAME
-   ```
+```sh
+npm run build
+```
 
-4. Install the dependencies with:
+## Docker Image
 
-   ```sh
-   npm i
-   ```
+The GitHub Actions workflow publishes images to GHCR:
 
-5. Copy `.env.example` to `.env`
+```text
+ghcr.io/<owner>/<repo>
+```
 
-   ```sh
-   cp .env.example .env
-   ```
+Tags include:
 
-6. Set the env variables according to the instructions in the .env file
+- `main`
+- `sha-<commit>`
+- semantic version tags such as `1.0.0` when pushing `v1.0.0`
 
-7. Start developing and watch for code changes:
+Configure these GitHub repository values before using the workflow:
 
-   ```sh
-   npm run dev
-   ```
+- Variable: `NEXT_PUBLIC_BASE_URL`
+- Secret: `NEXT_PUBLIC_ENCRYPTION_KEY`
+- Secret: `NEXT_PUBLIC_ENCRYPTION_IV`
 
-8. Please make sure that you can make a full production build before opening a PR. You can build the project with:
+Runtime-only values such as `NEXTAUTH_SECRET`, `OIDC_CLIENT_SECRET`, and
+`NEXT_MONGODB_URI` should be provided by the environment where the container
+runs.
 
-   ```sh
-   npm run build
-   ```
+## Origins
 
-## Acknowledgements
-
-Thanks to [everyone](https://github.com/anandbaburajan/samay/graphs/contributors) who contributed to Samay!
-
-Thanks to these amazing projects which help power Samay:
-
-- React-big-calendar
-- React
-- Next.js
-- Day.js
-- Bootstrap
-- MongoDB
-- Mongoose
-- Inter
-- Cal Sans
-
-Thanks to FOSS United for selecting Samay as one of the [winning projects](https://forum.fossunited.org/t/foss-hack-3-0-results/1882) at FOSS Hack 3.0.
+Slotline is based on the open source Samay scheduling project.
 
 ## License
 
-Samay is distributed under the [MIT License](https://github.com/anandbaburajan/samay/blob/main/LICENSE).
+This project is distributed under the MIT License.
