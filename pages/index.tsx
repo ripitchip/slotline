@@ -35,7 +35,7 @@ const Home = (): JSX.Element => {
   });
 
   const [pollType, setPollType] = useState("group");
-  const [timeStep, setTimeStep] = useState(60);
+  const [timeStep, setTimeStep] = useState(30);
 
   const { pollTitle, pollLocation, pollDescription } = pollDetails;
 
@@ -247,7 +247,7 @@ const Home = (): JSX.Element => {
                       as="select"
                       className="form-select"
                       name="timeStep"
-                      defaultValue="60"
+                      defaultValue="30"
                       onChange={handleTimeStepChange}
                     >
                       <option value="60">Hour slots (1h)</option>
