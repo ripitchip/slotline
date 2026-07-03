@@ -5,7 +5,6 @@ import { ToastContainer, toast } from "react-toastify";
 import toastOptions from "../../helpers/toastOptions";
 import { markFinalTime } from "../../utils/api/server";
 import { Time, PollFromDB } from "../../models/poll";
-import { encrypt } from "../../helpers";
 
 const SubmitFinalTime = (props: {
   finalTime: Time | undefined;
@@ -30,7 +29,7 @@ const SubmitFinalTime = (props: {
             open: false,
           },
           pollID,
-          secret: encrypt(secret),
+          secret,
         };
         const submitFinalTimeResponse = await markFinalTime(voterArgs);
         if (submitFinalTimeResponse.statusCode === 201) {

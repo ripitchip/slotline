@@ -7,8 +7,6 @@ services:
         # Change this value to the connection string if not using MongoDB container
         NEXT_MONGODB_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@database:27017/${MONGO_INITDB_DATABASE}?authSource=admin
         NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
-        NEXT_PUBLIC_ENCRYPTION_KEY: ${NEXT_PUBLIC_ENCRYPTION_KEY}
-        NEXT_PUBLIC_ENCRYPTION_IV: ${NEXT_PUBLIC_ENCRYPTION_IV}
     ports:
       - 3000:3000
     depends_on:

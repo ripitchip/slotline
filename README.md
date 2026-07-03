@@ -41,8 +41,8 @@ Required local values:
 
 ```env
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
-NEXT_PUBLIC_ENCRYPTION_KEY=<32-character-value>
-NEXT_PUBLIC_ENCRYPTION_IV=<16-character-value>
+ENCRYPTION_KEY=<32-character-value>
+ENCRYPTION_IV=<16-character-value>
 
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=<random-secret>
@@ -139,12 +139,10 @@ Tags include:
 Configure these GitHub repository values before using the workflow:
 
 - Variable: `NEXT_PUBLIC_BASE_URL`
-- Secret: `NEXT_PUBLIC_ENCRYPTION_KEY`
-- Secret: `NEXT_PUBLIC_ENCRYPTION_IV`
 
-Runtime-only values such as `NEXTAUTH_SECRET`, `OIDC_CLIENT_SECRET`, and
-`NEXT_MONGODB_URI` should be provided by the environment where the container
-runs.
+Runtime-only values such as `ENCRYPTION_KEY`, `ENCRYPTION_IV`,
+`NEXTAUTH_SECRET`, `OIDC_CLIENT_SECRET`, and `NEXT_MONGODB_URI` should be
+provided by the environment where the container runs.
 
 ## Origins
 

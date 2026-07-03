@@ -67,5 +67,3 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             NEXT_PUBLIC_BASE_URL=${{ vars.NEXT_PUBLIC_BASE_URL }}
-            NEXT_PUBLIC_ENCRYPTION_KEY=${{ secrets.NEXT_PUBLIC_ENCRYPTION_KEY }}
-            NEXT_PUBLIC_ENCRYPTION_IV=${{ secrets.NEXT_PUBLIC_ENCRYPTION_IV }}

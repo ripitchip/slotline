@@ -3,6 +3,7 @@ import SamayPoll, { PollDoc } from "../../../src/models/poll";
 import { getSessionUserId } from "../../../src/utils/pollAccess";
 import { getApiSession } from "../../../src/utils/auth";
 import connectToDatabase from "../../../src/utils/db";
+import { encrypt } from "../../../src/utils/encryption";
 
 const getRequestId = (req: NextApiRequest): string => {
   const header = req.headers["x-slotline-request-id"];
@@ -31,9 +32,8 @@ export default async (
           contentType: req.headers["content-type"] || null,
           bodyType: typeof body,
           bodyLength: typeof body === "string" ? body.length : null,
-          encryptionKeyLength:
-            process.env.NEXT_PUBLIC_ENCRYPTION_KEY?.length || 0,
-          encryptionIvLength: process.env.NEXT_PUBLIC_ENCRYPTION_IV?.length || 0,
+          encryptionKeyLength: process.env.ENCRYPTION_KEY?.length || 0,
+          encryptionIvLength: process.env.ENCRYPTION_IV?.length || 0,
           baseUrl: process.env.NEXT_PUBLIC_BASE_URL || null,
           nextauthUrl: process.env.NEXTAUTH_URL || null,
           hasMongoUri: Boolean(process.env.NEXT_MONGODB_URI),
@@ -77,11 +77,12 @@ export default async (
           descriptionLength: poll.description?.length || 0,
           locationLength: poll.location?.length || 0,
           hasSecret: Boolean(poll.secret),
-          encryptedSecretLength: poll.secret?.length || 0,
+          plainSecretLength: poll.secret?.length || 0,
         });
 
         const newPoll: PollDoc = new SamayPoll({
           ...poll,
+          secret: encrypt(poll.secret),
           ownerId,
           ownerEmail: session.user?.email || undefined,
           ownerName: session.user?.name || undefined,

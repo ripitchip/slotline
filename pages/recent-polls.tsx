@@ -5,7 +5,7 @@ import { Button, Card, Container } from "react-bootstrap";
 import { Grid } from "react-bootstrap-icons";
 import Layout from "../src/components/Layout";
 import DeletePoll from "../src/components/poll/DeletePoll";
-import { decrypt } from "../src/helpers";
+import { decrypt } from "../src/utils/encryption";
 import SamayPoll, { PollFromDB } from "../src/models/poll";
 import { getPageSession } from "../src/utils/auth";
 import connectToDatabase from "../src/utils/db";

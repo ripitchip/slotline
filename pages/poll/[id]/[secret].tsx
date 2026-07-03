@@ -10,7 +10,7 @@ import PollTableAdmin from "../../../src/components/poll/PollTableAdmin";
 import SubmitFinalTime from "../../../src/components/poll/SubmitFinalTime";
 import { Time, TimeFromDB, PollFromDB } from "../../../src/models/poll";
 import SamayPoll from "../../../src/models/poll";
-import { decrypt } from "../../../src/helpers";
+import { decrypt } from "../../../src/utils/encryption";
 import connectToDatabase from "../../../src/utils/db";
 
 dayjs.extend(localizedFormat);

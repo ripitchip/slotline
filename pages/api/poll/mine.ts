@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import SamayPoll, { PollFromDB } from "../../../src/models/poll";
-import { decrypt } from "../../../src/helpers";
+import { decrypt } from "../../../src/utils/encryption";
 import { getApiSession } from "../../../src/utils/auth";
 import {
   getSessionUserId,

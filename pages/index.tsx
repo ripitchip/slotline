@@ -15,7 +15,6 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import Layout from "../src/components/Layout";
 import SamayRBC from "../src/components/SamayRBC";
-import { encrypt } from "../src/helpers";
 import toastOptions from "../src/helpers/toastOptions";
 import { Poll, Time } from "../src/models/poll";
 import {
@@ -76,20 +75,16 @@ const Home = (): JSX.Element => {
         titleLength: pollTitle.length,
         descriptionLength: pollDescription.length,
         locationLength: pollLocation.length,
-        encryptionKeyLength:
-          process.env.NEXT_PUBLIC_ENCRYPTION_KEY?.length || 0,
-        encryptionIvLength: process.env.NEXT_PUBLIC_ENCRYPTION_IV?.length || 0,
       });
 
       const secret = nanoid(10);
-      const encryptedSecret = encrypt(secret);
 
       const poll: Poll = {
         title: pollTitle,
         description: pollDescription,
         location: pollLocation,
         type: pollType,
-        secret: encryptedSecret,
+        secret,
         times: pollTimes,
       };
 
@@ -107,7 +102,7 @@ const Home = (): JSX.Element => {
             const initSamayCreatedPolls = {
               polls: [
                 {
-                  [`${createPollResponse.data._id}-${pollTitle}`]: `${encryptedSecret}`,
+                  [`${createPollResponse.data._id}-${pollTitle}`]: `${secret}`,
                 },
               ],
             };
@@ -120,7 +115,7 @@ const Home = (): JSX.Element => {
             let samayCreatedPollsJSON = JSON.parse(samayCreatedPolls);
 
             samayCreatedPollsJSON.polls.push({
-              [`${createPollResponse.data._id}-${pollTitle}`]: `${encryptedSecret}`,
+              [`${createPollResponse.data._id}-${pollTitle}`]: `${secret}`,
             });
 
             localStorage.setItem(

@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import SamayPoll, { PollDoc } from "../../../../src/models/poll";
 import connectToDatabase from "../../../../src/utils/db";
+import { decrypt } from "../../../../src/utils/encryption";
 
 export default async (
   req: NextApiRequest,
@@ -20,7 +21,7 @@ export default async (
           _id: id,
         }).lean();
         if (poll) {
-          if (poll.secret !== secret) {
+          if (decrypt(poll.secret) !== secret) {
             res.status(403).json({ message: "Forbidden" });
           } else {
             try {
@@ -48,7 +49,7 @@ export default async (
           _id: id,
         }).lean();
         if (poll) {
-          if (poll.secret !== secret) {
+          if (decrypt(poll.secret) !== secret) {
             res.status(403).json({ message: "Forbidden" });
           } else {
             try {

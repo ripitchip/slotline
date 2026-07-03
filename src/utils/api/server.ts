@@ -62,7 +62,7 @@ const createPoll = (pollArgs: { poll: Poll }): Promise<HttpResponse> => {
     pollType: poll.type,
     titleLength: poll.title?.length || 0,
     hasSecret: Boolean(poll.secret),
-    encryptedSecretLength: poll.secret?.length || 0,
+    plainSecretLength: poll.secret?.length || 0,
   });
 
   const requestOptions: RequestInit = {

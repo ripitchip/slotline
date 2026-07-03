@@ -6,7 +6,6 @@ import { useState } from "react";
 import Router from "next/router";
 import toastOptions from "../../helpers/toastOptions";
 import { deletePoll } from "../../utils/api/server";
-import { encrypt } from "../../helpers";
 
 const DeleteModal = (props: { show; onHide; handleDelete }): JSX.Element => {
   const { handleDelete } = props;
@@ -49,7 +48,7 @@ const DeletePoll = (props: {
       let deletePollResponse;
       const deleteArgs = {
         pollID,
-        secret: encrypt(secret),
+        secret,
       };
       deletePollResponse = await deletePoll(deleteArgs);
       if (
