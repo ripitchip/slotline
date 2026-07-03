@@ -24,18 +24,8 @@ const CopyTextMain = (props: {
   const { poll, baseUrl } = props;
 
   const pollTitle = poll.title;
-  const initialBaseUrl = baseUrl || NEXT_PUBLIC_BASE_URL;
-  const [pollURL, setPollURL] = useState(
-    `${initialBaseUrl}/poll/${poll._id}`
-  );
-
-  useEffect(() => {
-    if (baseUrl) {
-      setPollURL(`${baseUrl}/poll/${poll._id}`);
-    } else if (typeof window !== "undefined") {
-      setPollURL(`${window.location.origin}/poll/${poll._id}`);
-    }
-  }, [poll._id, baseUrl]);
+  const resolvedBaseUrl = baseUrl || (typeof window !== "undefined" ? window.location.origin : NEXT_PUBLIC_BASE_URL);
+  const pollURL = `${resolvedBaseUrl}/poll/${poll._id}`;
 
   const pollLocation = poll.location;
   const { finalTime } = poll;
