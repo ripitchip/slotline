@@ -102,7 +102,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "";
+  const baseUrl = process.env['NEXT_PUBLIC_BASE_URL'] || "";
 
   return {
     props: { pollFromDB, pollID, secret, baseUrl }, // will be passed to the page component as props
