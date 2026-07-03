@@ -18,7 +18,10 @@ import SamayRBC from "../src/components/SamayRBC";
 import { encrypt } from "../src/helpers";
 import toastOptions from "../src/helpers/toastOptions";
 import { Poll, Time } from "../src/models/poll";
-import { createPoll } from "../src/utils/api/server";
+import {
+  createPoll,
+  getHttpResponseErrorMessage,
+} from "../src/utils/api/server";
 import { getPageSession } from "../src/utils/auth";
 
 const Home = (): JSX.Element => {
@@ -67,6 +70,17 @@ const Home = (): JSX.Element => {
     }
 
     try {
+      console.info("Poll creation submit started", {
+        timesCount: pollTimes.length,
+        pollType,
+        titleLength: pollTitle.length,
+        descriptionLength: pollDescription.length,
+        locationLength: pollLocation.length,
+        encryptionKeyLength:
+          process.env.NEXT_PUBLIC_ENCRYPTION_KEY?.length || 0,
+        encryptionIvLength: process.env.NEXT_PUBLIC_ENCRYPTION_IV?.length || 0,
+      });
+
       const secret = nanoid(10);
       const encryptedSecret = encrypt(secret);
 
@@ -119,11 +133,15 @@ const Home = (): JSX.Element => {
       } else {
         setDisabled(false);
         toast.error(
-          "Poll creation failed, please try again later",
+          getHttpResponseErrorMessage(
+            createPollResponse,
+            "Poll creation failed, please try again later"
+          ),
           toastOptions
         );
       }
     } catch (err) {
+      console.error("Poll creation failed", err);
       setDisabled(false);
       toast.error("Poll creation failed, please try again later", toastOptions);
     }

@@ -24,6 +24,19 @@ const httpMethod = async (
   };
 };
 
+const getHttpResponseErrorMessage = (
+  response: HttpResponse,
+  fallbackMessage: string
+): string => {
+  const message = response?.data?.message;
+
+  if (typeof message === "string" && message.trim()) {
+    return message;
+  }
+
+  return fallbackMessage;
+};
+
 const getPoll = (
   pollID: string | string[] | null | undefined
 ): Promise<HttpResponse> => {
@@ -37,12 +50,39 @@ const getPoll = (
 const createPoll = (pollArgs: { poll: Poll }): Promise<HttpResponse> => {
   const { poll } = pollArgs;
   const endpoint = `${getApiBaseUrl()}/api/poll/create`;
+  const requestId =
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+
+  console.info("Poll creation request started", {
+    requestId,
+    endpoint,
+    timesCount: poll.times?.length || 0,
+    pollType: poll.type,
+    titleLength: poll.title?.length || 0,
+    hasSecret: Boolean(poll.secret),
+    encryptedSecretLength: poll.secret?.length || 0,
+  });
+
   const requestOptions: RequestInit = {
     method: "POST",
     credentials: "same-origin",
+    headers: {
+      "x-slotline-request-id": requestId,
+    },
     body: JSON.stringify(poll),
   };
-  return httpMethod(endpoint, requestOptions);
+  return httpMethod(endpoint, requestOptions).then((response) => {
+    console.info("Poll creation response received", {
+      requestId,
+      statusCode: response.statusCode,
+      message: response.data?.message,
+      pollId: response.data?._id,
+    });
+
+    return response;
+  });
 };
 
 const markTimes = (voteArgs: {
@@ -86,4 +126,11 @@ const deletePoll = (deleteArgs: {
   return httpMethod(endpoint, requestOptions);
 };
 
-export { getPoll, createPoll, markTimes, markFinalTime, deletePoll };
+export {
+  getPoll,
+  createPoll,
+  markTimes,
+  markFinalTime,
+  deletePoll,
+  getHttpResponseErrorMessage,
+};
