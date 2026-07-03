@@ -28,6 +28,22 @@ export const serializePollForViewer = (
     };
   }
 
+  if (poll.resultsVisibility === "votes") {
+    const {
+      secret,
+      ownerId,
+      ownerEmail,
+      ownerName,
+      ...publicPoll
+    } = poll;
+
+    return {
+      ...publicPoll,
+      occupiedTimes,
+      publicTimeCounts,
+    };
+  }
+
   const {
     secret,
     votes,
