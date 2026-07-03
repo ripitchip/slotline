@@ -46,7 +46,7 @@ export interface Poll {
   finalTime?: Time;
   votes?: Vote[];
   step?: number;
-  showResultsToParticipants?: boolean;
+  resultsVisibility?: "votes" | "count" | "nothing";
 }
 
 export interface PollFromDB {
@@ -66,7 +66,7 @@ export interface PollFromDB {
   occupiedTimes?: TimeFromDB[];
   publicTimeCounts?: PublicTimeCount[];
   step?: number;
-  showResultsToParticipants?: boolean;
+  resultsVisibility?: "votes" | "count" | "nothing";
   createdAt: string;
   updatedAt: string;
   __v: number;
@@ -86,7 +86,7 @@ export interface PollDoc extends Document {
   finalTime?: Time;
   votes?: Vote[];
   step?: number;
-  showResultsToParticipants?: boolean;
+  resultsVisibility?: "votes" | "count" | "nothing";
 }
 
 const PollSchema: Schema = new Schema(
@@ -101,7 +101,7 @@ const PollSchema: Schema = new Schema(
     location: { type: String },
     type: { type: String },
     step: { type: Number, default: 60 },
-    showResultsToParticipants: { type: Boolean, default: true },
+    resultsVisibility: { type: String, default: "votes" },
     times: {
       type: [{ start: Number, end: Number }],
       required: true,

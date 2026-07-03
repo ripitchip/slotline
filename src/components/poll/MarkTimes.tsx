@@ -6,8 +6,9 @@ const MarkTimes = (props: {
   times: Time[];
   newVote: Vote;
   setNewVote: Dispatch<Vote>;
+  hasParticipantColumn?: boolean;
 }): JSX.Element => {
-  const { times, newVote, setNewVote } = props;
+  const { times, newVote, setNewVote, hasParticipantColumn } = props;
 
   const [timeBoxStatus, setTimeBoxStatus] = useState<Record<string, number>>(
     times.reduce(
@@ -64,6 +65,7 @@ const MarkTimes = (props: {
 
   return (
     <tr>
+      {hasParticipantColumn && <td className="poll-table-participants"> </td>}
       {times.map((time) => (
         <td key={JSON.stringify(time)} className="poll-mark-time-cell">
           <div

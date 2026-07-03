@@ -8,8 +8,9 @@ const MarkTimesOneOnOne = (props: {
   newVote: Vote;
   poll: PollFromDB;
   setNewVote: Dispatch<Vote>;
+  hasParticipantColumn?: boolean;
 }): JSX.Element => {
-  const { times, newVote, poll, setNewVote } = props;
+  const { times, newVote, poll, setNewVote, hasParticipantColumn } = props;
 
   let votedTimes =
     poll.occupiedTimes || poll.votes?.map((vote) => vote.times[0]) || [];
@@ -33,6 +34,7 @@ const MarkTimesOneOnOne = (props: {
 
   return (
     <tr>
+      {hasParticipantColumn && <td className="poll-table-participants"> </td>}
       {times.map((time) => {
         const occupied = isTimePresentInPollTimes(time, votedTimes);
 

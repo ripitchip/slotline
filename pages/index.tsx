@@ -36,7 +36,7 @@ const Home = (): JSX.Element => {
 
   const [pollType, setPollType] = useState("group");
   const [timeStep, setTimeStep] = useState(30);
-  const [showResultsToParticipants, setShowResultsToParticipants] = useState(true);
+  const [resultsVisibility, setResultsVisibility] = useState("votes");
 
   const { pollTitle, pollLocation, pollDescription } = pollDetails;
 
@@ -66,6 +66,12 @@ const Home = (): JSX.Element => {
     setTimeStep(parseInt(e.target.value, 10));
   };
 
+  const handleResultsVisibilityChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
+    setResultsVisibility(e.target.value);
+  };
+
   const handleSubmit = async (
     e: React.MouseEvent<HTMLInputElement>
   ): Promise<void> => {
@@ -84,12 +90,12 @@ const Home = (): JSX.Element => {
         descriptionLength: pollDescription.length,
         locationLength: pollLocation.length,
         timeStep,
-        showResultsToParticipants,
+        resultsVisibility,
       });
 
       const secret = nanoid(10);
 
-      const poll: Poll & { step?: number; showResultsToParticipants?: boolean } = {
+      const poll: Poll & { step?: number; resultsVisibility?: string } = {
         title: pollTitle,
         description: pollDescription,
         location: pollLocation,
@@ -97,7 +103,7 @@ const Home = (): JSX.Element => {
         secret,
         times: pollTimes,
         step: timeStep,
-        showResultsToParticipants,
+        resultsVisibility,
       };
 
       setDisabled(true);
@@ -259,16 +265,19 @@ const Home = (): JSX.Element => {
                     </Form.Control>
                   </Form.Group>
                 </Col>
-                <Col sm className="samay-form-col d-flex align-items-center">
-                  <Form.Group className="form-group mb-0">
-                    <Form.Check
-                      type="checkbox"
-                      id="show-results-checkbox"
-                      label="Show votes to voters"
-                      checked={showResultsToParticipants}
-                      onChange={(e) => setShowResultsToParticipants(e.target.checked)}
-                      className="form-checkbox-text"
-                    />
+                <Col sm className="samay-form-col">
+                  <Form.Group className="form-group">
+                    <Form.Control
+                      as="select"
+                      className="form-select"
+                      name="resultsVisibility"
+                      defaultValue="votes"
+                      onChange={handleResultsVisibilityChange}
+                    >
+                      <option value="votes">View votes</option>
+                      <option value="count">View vote counts</option>
+                      <option value="nothing">View nothing</option>
+                    </Form.Control>
                   </Form.Group>
                 </Col>
                 <Col sm="auto">
