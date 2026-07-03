@@ -24,6 +24,7 @@ const PollTableVoter = (props: {
   const { pollFromDB, sortedTimes, newVote, setNewVote } = props;
 
   const visibility = pollFromDB.resultsVisibility || "votes";
+  const votes = pollFromDB.votes || [];
 
   return (
     <div>
@@ -63,10 +64,10 @@ const PollTableVoter = (props: {
               {visibility === "votes" && (
                 <td className="poll-table-total-participants">
                   {pollFromDB.type === "group"
-                    ? pollFromDB.votes?.length + 1
-                    : pollFromDB.votes?.length}
+                    ? votes.length + 1
+                    : votes.length}
                   &nbsp; &nbsp;
-                  {pollFromDB.type === "oneonone" && pollFromDB.votes?.length === 1
+                  {pollFromDB.type === "oneonone" && votes.length === 1
                     ? "PARTICIPANT"
                     : "PARTICIPANTS"}
                 </td>
@@ -74,16 +75,16 @@ const PollTableVoter = (props: {
               {sortedTimes.map((time: Time) => (
                 <td key={JSON.stringify(time)} className={visibility === "votes" ? "poll-slot-total-votes" : "poll-public-count-cell"}>
                   {visibility === "votes" ? (
-                    pollFromDB.votes?.filter((vote: Vote) =>
+                    votes.filter((vote: Vote) =>
                       isTimePresentInPollTimes(time, vote.times)
                     ).length !== 0 && (
                       <span>
                         <PersonFill className="poll-total-votes-icon" />
                         {pollFromDB.type === "group"
-                          ? pollFromDB.votes?.filter((vote: Vote) =>
+                          ? votes.filter((vote: Vote) =>
                               isTimePresentInPollTimes(time, vote.times)
                             ).length + 1
-                          : pollFromDB.votes?.filter((vote: Vote) =>
+                          : votes.filter((vote: Vote) =>
                               isTimePresentInPollTimes(time, vote.times)
                             ).length}
                       </span>
@@ -107,7 +108,7 @@ const PollTableVoter = (props: {
             </tr>
           )}
           {visibility === "votes" &&
-            pollFromDB.votes?.map((vote: Vote, idx: number) => (
+            votes.map((vote: Vote, idx: number) => (
               <tr key={`${idx}-${vote.name}`}>
                 <td className="poll-table-participants">{vote.name}</td>
                 {sortedTimes.map((time: Time) => (
