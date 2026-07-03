@@ -4,8 +4,12 @@ import { Time } from "../models/poll";
 
 const localizer = dayjsLocalizer(dayjs);
 
-const SamayRBC = (props: { pollTimes; setTimes }): JSX.Element => {
-  const { pollTimes, setTimes } = props;
+const SamayRBC = (props: {
+  pollTimes;
+  setTimes;
+  step?: number;
+}): JSX.Element => {
+  const { pollTimes, setTimes, step = 60 } = props;
 
   const onTimesChange = ({ start, end }): void => {
     const newTime: Time = {
@@ -50,7 +54,7 @@ const SamayRBC = (props: { pollTimes; setTimes }): JSX.Element => {
       localizer={localizer}
       onSelectSlot={onTimesChange}
       onSelectEvent={onTimeRemove}
-      step={60}
+      step={step}
       timeslots={1}
       scrollToTime={new Date(1970, 0, 1, 8, 0, 0)}
       formats={formats}

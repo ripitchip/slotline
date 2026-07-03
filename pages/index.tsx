@@ -35,6 +35,7 @@ const Home = (): JSX.Element => {
   });
 
   const [pollType, setPollType] = useState("group");
+  const [timeStep, setTimeStep] = useState(60);
 
   const { pollTitle, pollLocation, pollDescription } = pollDetails;
 
@@ -58,6 +59,12 @@ const Home = (): JSX.Element => {
     setPollType(e.target.value);
   };
 
+  const handleTimeStepChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
+    setTimeStep(parseInt(e.target.value, 10));
+  };
+
   const handleSubmit = async (
     e: React.MouseEvent<HTMLInputElement>
   ): Promise<void> => {
@@ -75,17 +82,19 @@ const Home = (): JSX.Element => {
         titleLength: pollTitle.length,
         descriptionLength: pollDescription.length,
         locationLength: pollLocation.length,
+        timeStep,
       });
 
       const secret = nanoid(10);
 
-      const poll: Poll = {
+      const poll: Poll & { step?: number } = {
         title: pollTitle,
         description: pollDescription,
         location: pollLocation,
         type: pollType,
         secret,
         times: pollTimes,
+        step: timeStep,
       };
 
       setDisabled(true);
@@ -184,7 +193,7 @@ const Home = (): JSX.Element => {
         <div className="global-page-section">
           <Container className="global-container">
             <Jumbotron className="new-poll-timeslot-jumbo">
-              <SamayRBC pollTimes={pollTimes} setTimes={setTimes} />
+              <SamayRBC pollTimes={pollTimes} setTimes={setTimes} step={timeStep} />
             </Jumbotron>
             <Jumbotron className="new-poll-jumbo">
               <Row>
@@ -229,6 +238,21 @@ const Home = (): JSX.Element => {
                     >
                       <option value="group">Group poll</option>
                       <option value="oneonone">One-on-one poll</option>
+                    </Form.Control>
+                  </Form.Group>
+                </Col>
+                <Col sm className="samay-form-col">
+                  <Form.Group className="form-group">
+                    <Form.Control
+                      as="select"
+                      className="form-select"
+                      name="timeStep"
+                      defaultValue="60"
+                      onChange={handleTimeStepChange}
+                    >
+                      <option value="60">Hour slots (1h)</option>
+                      <option value="30">30-minute slots</option>
+                      <option value="15">15-minute slots</option>
                     </Form.Control>
                   </Form.Group>
                 </Col>

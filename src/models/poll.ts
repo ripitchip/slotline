@@ -45,6 +45,7 @@ export interface Poll {
   times: Time[];
   finalTime?: Time;
   votes?: Vote[];
+  step?: number;
 }
 
 export interface PollFromDB {
@@ -63,6 +64,7 @@ export interface PollFromDB {
   votes?: VoteFromDB[];
   occupiedTimes?: TimeFromDB[];
   publicTimeCounts?: PublicTimeCount[];
+  step?: number;
   createdAt: string;
   updatedAt: string;
   __v: number;
@@ -81,6 +83,7 @@ export interface PollDoc extends Document {
   times: Time[];
   finalTime?: Time;
   votes?: Vote[];
+  step?: number;
 }
 
 const PollSchema: Schema = new Schema(
@@ -94,6 +97,7 @@ const PollSchema: Schema = new Schema(
     ownerName: { type: String },
     location: { type: String },
     type: { type: String },
+    step: { type: Number, default: 60 },
     times: {
       type: [{ start: Number, end: Number }],
       required: true,
