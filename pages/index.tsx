@@ -66,19 +66,19 @@ const Home = (): JSX.Element => {
       return;
     }
 
-    const secret = nanoid(10);
-    const encryptedSecret = encrypt(secret);
-
-    const poll: Poll = {
-      title: pollTitle,
-      description: pollDescription,
-      location: pollLocation,
-      type: pollType,
-      secret: encryptedSecret,
-      times: pollTimes,
-    };
-
     try {
+      const secret = nanoid(10);
+      const encryptedSecret = encrypt(secret);
+
+      const poll: Poll = {
+        title: pollTitle,
+        description: pollDescription,
+        location: pollLocation,
+        type: pollType,
+        secret: encryptedSecret,
+        times: pollTimes,
+      };
+
       setDisabled(true);
 
       const createPollResponse = await createPoll({
