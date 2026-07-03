@@ -65,16 +65,18 @@ const PollTableVoter = (props: {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            {sortedTimes.map((time: Time) => (
-              <td key={JSON.stringify(time)} className="poll-public-count-cell">
-                <span className="poll-public-count">
-                  <PersonFill className="poll-public-count-icon" />
-                  {getPublicCountLabel(time)}
-                </span>
-              </td>
-            ))}
-          </tr>
+          {pollFromDB.showResultsToParticipants !== false && (
+            <tr>
+              {sortedTimes.map((time: Time) => (
+                <td key={JSON.stringify(time)} className="poll-public-count-cell">
+                  <span className="poll-public-count">
+                    <PersonFill className="poll-public-count-icon" />
+                    {getPublicCountLabel(time)}
+                  </span>
+                </td>
+              ))}
+            </tr>
+          )}
           {pollFromDB.open &&
             (!pollFromDB.type || pollFromDB.type === "group") && (
               <MarkTimes

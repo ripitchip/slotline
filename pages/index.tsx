@@ -36,6 +36,7 @@ const Home = (): JSX.Element => {
 
   const [pollType, setPollType] = useState("group");
   const [timeStep, setTimeStep] = useState(30);
+  const [showResultsToParticipants, setShowResultsToParticipants] = useState(true);
 
   const { pollTitle, pollLocation, pollDescription } = pollDetails;
 
@@ -83,11 +84,12 @@ const Home = (): JSX.Element => {
         descriptionLength: pollDescription.length,
         locationLength: pollLocation.length,
         timeStep,
+        showResultsToParticipants,
       });
 
       const secret = nanoid(10);
 
-      const poll: Poll & { step?: number } = {
+      const poll: Poll & { step?: number; showResultsToParticipants?: boolean } = {
         title: pollTitle,
         description: pollDescription,
         location: pollLocation,
@@ -95,6 +97,7 @@ const Home = (): JSX.Element => {
         secret,
         times: pollTimes,
         step: timeStep,
+        showResultsToParticipants,
       };
 
       setDisabled(true);
@@ -254,6 +257,18 @@ const Home = (): JSX.Element => {
                       <option value="30">30-minute slots</option>
                       <option value="15">15-minute slots</option>
                     </Form.Control>
+                  </Form.Group>
+                </Col>
+                <Col sm className="samay-form-col d-flex align-items-center">
+                  <Form.Group className="form-group mb-0">
+                    <Form.Check
+                      type="checkbox"
+                      id="show-results-checkbox"
+                      label="Show votes to voters"
+                      checked={showResultsToParticipants}
+                      onChange={(e) => setShowResultsToParticipants(e.target.checked)}
+                      className="form-checkbox-text"
+                    />
                   </Form.Group>
                 </Col>
                 <Col sm="auto">
