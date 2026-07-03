@@ -24,6 +24,22 @@ const SamayRBC = (props: { pollTimes; setTimes }): JSX.Element => {
     setTimes([...newPollTimes]);
   };
 
+  const formats = {
+    timeGutterFormat: "HH:mm",
+    eventTimeRangeFormat: ({ start, end }, culture, localizer) =>
+      `${localizer.format(start, "HH:mm", culture)} – ${localizer.format(
+        end,
+        "HH:mm",
+        culture
+      )}`,
+    selectRangeFormat: ({ start, end }, culture, localizer) =>
+      `${localizer.format(start, "HH:mm", culture)} – ${localizer.format(
+        end,
+        "HH:mm",
+        culture
+      )}`,
+  };
+
   return (
     <Calendar
       defaultView={Views.WEEK}
@@ -34,7 +50,10 @@ const SamayRBC = (props: { pollTimes; setTimes }): JSX.Element => {
       localizer={localizer}
       onSelectSlot={onTimesChange}
       onSelectEvent={onTimeRemove}
-      step={15}
+      step={60}
+      timeslots={1}
+      scrollToTime={new Date(1970, 0, 1, 8, 0, 0)}
+      formats={formats}
       views={["week"]}
       selectable
     />
