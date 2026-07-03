@@ -19,8 +19,9 @@ const Poll = (props: {
   pollFromDB: PollFromDB;
   pollID: string;
   secret: string;
+  baseUrl: string;
 }): JSX.Element => {
-  const { pollFromDB, pollID, secret } = props;
+  const { pollFromDB, pollID, secret, baseUrl } = props;
   const sortedTimes: TimeFromDB[] = pollFromDB.times.sort(
     (a: TimeFromDB, b: TimeFromDB) => a.start - b.start
   );
@@ -38,7 +39,12 @@ const Poll = (props: {
         <div className="global-page-section">
           <Container className="global-container">
             <Jumbotron className="poll-info-jumbo">
-              <AdminPollInfo poll={pollFromDB} showFinalTime showCopyBox />
+              <AdminPollInfo
+                poll={pollFromDB}
+                showFinalTime
+                showCopyBox
+                baseUrl={baseUrl}
+              />
             </Jumbotron>
             {pollFromDB.votes?.length > 0 && (
               <>
@@ -96,8 +102,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "";
+
   return {
-    props: { pollFromDB, pollID, secret }, // will be passed to the page component as props
+    props: { pollFromDB, pollID, secret, baseUrl }, // will be passed to the page component as props
   };
 };
 

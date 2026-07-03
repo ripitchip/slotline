@@ -17,19 +17,25 @@ dayjs.extend(localizedFormat);
 const NEXT_PUBLIC_BASE_URL =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-const CopyTextMain = (props: { poll: PollFromDB }): JSX.Element => {
-  const { poll } = props;
+const CopyTextMain = (props: {
+  poll: PollFromDB;
+  baseUrl?: string;
+}): JSX.Element => {
+  const { poll, baseUrl } = props;
 
   const pollTitle = poll.title;
+  const initialBaseUrl = baseUrl || NEXT_PUBLIC_BASE_URL;
   const [pollURL, setPollURL] = useState(
-    `${NEXT_PUBLIC_BASE_URL}/poll/${poll._id}`
+    `${initialBaseUrl}/poll/${poll._id}`
   );
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (baseUrl) {
+      setPollURL(`${baseUrl}/poll/${poll._id}`);
+    } else if (typeof window !== "undefined") {
       setPollURL(`${window.location.origin}/poll/${poll._id}`);
     }
-  }, [poll._id]);
+  }, [poll._id, baseUrl]);
 
   const pollLocation = poll.location;
   const { finalTime } = poll;

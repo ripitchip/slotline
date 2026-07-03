@@ -18,8 +18,9 @@ const AdminPollInfo = (props: {
   poll: PollFromDB;
   showFinalTime: boolean;
   showCopyBox: boolean;
+  baseUrl?: string;
 }): JSX.Element => {
-  const { poll, showFinalTime, showCopyBox } = props;
+  const { poll, showFinalTime, showCopyBox, baseUrl } = props;
   return (
     <div>
       {(!poll.type || poll.type === "group") && (
@@ -79,7 +80,7 @@ const AdminPollInfo = (props: {
         <>
           <span className="poll-info-detail-title-share copy-text-mobile">
             <ShareFill className="poll-info-icon" />
-            <CopyText poll={poll} />
+            <CopyText poll={poll} baseUrl={baseUrl} />
           </span>
         </>
       )}
@@ -87,7 +88,7 @@ const AdminPollInfo = (props: {
         <>
           <span className="poll-info-detail-title-share copy-text-desktop">
             <ShareFill className="poll-info-icon" />
-            Share this <CopyText poll={poll} /> with the participants
+            Share this <CopyText poll={poll} baseUrl={baseUrl} /> with the participants
           </span>
         </>
       )}
