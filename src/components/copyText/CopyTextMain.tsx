@@ -9,7 +9,7 @@ import { Files } from "react-bootstrap-icons";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import copy from "copy-to-clipboard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PollFromDB } from "../../models/poll";
 
 dayjs.extend(localizedFormat);
@@ -21,7 +21,16 @@ const CopyTextMain = (props: { poll: PollFromDB }): JSX.Element => {
   const { poll } = props;
 
   const pollTitle = poll.title;
-  const pollURL = `${NEXT_PUBLIC_BASE_URL}/poll/${poll._id}`;
+  const [pollURL, setPollURL] = useState(
+    `${NEXT_PUBLIC_BASE_URL}/poll/${poll._id}`
+  );
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setPollURL(`${window.location.origin}/poll/${poll._id}`);
+    }
+  }, [poll._id]);
+
   const pollLocation = poll.location;
   const { finalTime } = poll;
 
